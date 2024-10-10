@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vio-Cam</title>
+    <link rel="stylesheet" href="/static/css/styles.css">
+    <link rel="icon" href="/static/images/logo.png" type="image/x-icon">
+    <style>
+        #webcam-feed {
+            display: none;
+            width: 100%;
+            max-width: 1000px;
+            border: 1px solid #ccc;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 10px;
+            margin-left: 20px ;
+            margin-right: 20px;
+            margin-top: 50px;
+        }
+
+        .grid-item {
+            border: 1px solid #ccc;
+            padding: 5px;
+            text-align: center;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        #message {
+            margin: 20px 0;
+            font-weight: bold;
+            color: red;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .timestamp {
+            font-size: 12px;
+            color: gray;
+        }
+
+        .load {
+            padding: 10px 20px; /* Padding for the button */
+            background-color: #0d47a1; /* Button background color */
+            color: #ffffff; /* White text color */
+            border: none; /* Remove border */
+            border-radius: 5px; /* Rounded corners */
+            cursor: pointer; /* Pointer cursor on hover */
+            font-size: 1rem; /* Font size */
+            transition: background-color 0.3s, transform 0.3s; /* Smooth transition effects */
+            display: block; /* Make the button a block element */
+            margin-top: 20px  /* Center align the button */
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Navigation Bar -->
+    <nav>
+        <div class="logo">
+            <img src="/static/images/logo.png" alt="Logo" width="50" height="50">
+            <span>Vio-Cam</span>
+        </div>
+        <ul class="nav-links">
+            <li><a href="/">Home</a></li>
+            {% if session.username %}
+                <li><a href="/profile">{{ session.username }}</a></li>
+                <li><a href="/logout">Logout</a></li>
+            {% else %}
+                <li><a href="/login">Login/Signup</a></li>
+            {% endif %}
+        </ul>
+    </nav>
+
+    <div id="message"></div> <!-- Message display for feedback -->
+    
+    <button  id="start-button">Start Detection</button> <br>
+    <button  id="stop-button">Stop Detection</button>
+    <button class="load" id="load-frames-button" >Load Last 20 Images</button> <!-- New button -->
+
+    <div class="grid-container" id="captured-frames-container"></div>
+
+    <footer>
+        <div class="footer-content">
+           
+            <p></p>
+        </div>
+    </footer>
+
+ 
+    <script>
+        document.getElementById('start-button').addEventListener('click', function() {
+            fetch('/start_detection', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('message').innerText = data.message;
+                // loadCapturedFrames();  // Load frames when detection starts
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+                document.getElementById('message').innerText = 'Error starting detection.';
+            });
+        });
+
+        document.getElementById('stop-button').addEventListener('click', function() {
+            fetch('/stop_detection', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('message').innerText = data.message;
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+        });
+
+        // Load captured frames from the server
+        function loadCapturedFrames() {
+            fetch('/get_captured_frames', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok ' + response.statusText);
+                }
+                return response.json();
+            })
+            .then(data => {
+                const container = document.getElementById('captured-frames-container');
+                container.innerHTML = '';  // Clear previous frames
+
+                if (!data.frames || data.frames.length === 0) {
+                    const noFramesMessage = document.createElement('div');
+                    noFramesMessage.textContent = 'No captured frames available.';
+                    container.appendChild(noFramesMessage);
+                } else {
+                    data.frames.forEach(frame => {
+                        const frameElement = document.createElement('div');
+                        frameElement.className = 'grid-item';
+                        const imageElement = document.createElement('img');
+                        imageElement.src = frame.image;
+                        const timestampElement = document.createElement('div');
+                        timestampElement.className = 'timestamp';
+                        timestampElement.textContent = new Date(frame.timestamp * 1000).toLocaleString(); // Convert timestamp
+                        frameElement.appendChild(imageElement);
+                        frameElement.appendChild(timestampElement);
+                        container.appendChild(frameElement);
+                    });
+                }
+            })
+            .catch((error) => {
+                console.error('Error loading captured frames:', error);
+            });
+        }
+
+        document.getElementById('load-frames-button').addEventListener('click', loadCapturedFrames); // Attach event listener
+    </script>
+
+</body>
+</html>

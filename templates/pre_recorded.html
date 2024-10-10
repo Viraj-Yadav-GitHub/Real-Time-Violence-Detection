@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vio-Cam</title>
+    <link rel="stylesheet" href="/static/css/styles.css">
+    <link rel="icon" href="/static/images/logo.png" type="image/x-icon">
+    <style>
+        /* Pre-Recorded Container Styles */
+        .pre-recorded-container {
+            max-width: 800px;
+            height: auto;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        /* Heading Styles */
+        .pre-recorded-container h2 {
+            color: #0d47a1;
+            margin-bottom: 20px;
+        }
+
+        /* Form Styles */
+        .upload-form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* File Input Styles */
+        #videoFile {
+            margin-bottom: 20px;
+            padding: 10px;
+            border: 2px solid #0d47a1;
+            border-radius: 5px;
+            width: 100%;
+            max-width: 400px;
+            background-color: #f9f9f9;
+            font-size: 16px;
+        }
+
+        /* Progress Container Styles */
+        .progress-container {
+            width: 100%;
+            height: 20px;
+            background-color: #e0e0e0;
+            border-radius: 5px;
+            margin-top: 10px;
+            display: none; /* Initially hidden */
+        }
+
+        /* Progress Bar Styles */
+        .progress-bar {
+            height: 100%;
+            width: 0%; /* Initial width */
+            background-color: #101426; /* Color of the progress */
+            border-radius: 5px; /* Rounded corners */
+            transition: width 0.5s ease; /* Smooth transition */
+        }
+
+        /* Video Player Styles */
+        video {
+            max-width: 100%;
+            margin-top: 20px;
+            display: none; /* Initially hidden */
+        }
+
+        /* Custom Alert Box Styles */
+        .alert-box {
+            display: none; /* Hidden by default */
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            border: 2px solid #0d47a1;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            z-index: 1000; /* On top of everything */
+            width: 500px; /* Fixed width for the alert box */
+            max-height: 150px; /* Set a maximum height for the alert box */
+            overflow-y: auto; /* Enable vertical scrolling if content exceeds max height */
+            padding: 20px; /* Padding inside the alert box */
+        }
+
+        .alert-box h2 {
+            color: #0d47a1;
+            margin-top: 0; /* Remove default margin */
+        }
+
+        .alert-box button {
+            background-color: #101426;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            float: right; /* Align button to the right */
+        }
+
+        .overlay {
+            display: none; /* Hidden by default */
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+            z-index: 999; /* Below the alert box */
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation Bar -->
+    <nav>
+        <div class="logo">
+            <img src="/static/images/logo.png" alt="Logo" width="50" height="50">
+            <span>Vio-Cam</span>
+        </div>
+        <ul class="nav-links">
+            <li><a href="/">Home</a></li>
+            {% if session.logged_in %}
+                <li><a href="/profile">{{ session.username }}</a></li>
+                <li><a href="/logout">Logout</a></li>
+            {% else %}
+                <li><a href="/login">Login/Signup</a></li>
+            {% endif %}
+        </ul>
+    </nav>
+
+    <!-- Pre-Recorded Video Detection Section -->
+    <div class="pre-recorded-container">
+        <h2>Pre-Recorded Video Detection</h2>
+        <form id="uploadForm" enctype="multipart/form-data" class="upload-form">
+            <input type="file" id="videoFile" accept="video/*" required>
+            <button type="submit" class="btn">Upload and Detect</button>
+        </form>
+
+        <div id="progressContainer" class="progress-container">
+            <div id="progressBar" class="progress-bar"></div>
+        </div>
+    
+
+        <!-- Video Player -->
+        <video id="videoPlayer" controls loop ></video>
+
+     
+        
+    </div>
+
+        <!-- Progress Bar -->
+     
+    <!-- Custom Alert Box -->
+    <div class="overlay" id="overlay"></div>
+    <div class="alert-box" id="alertBox">
+        <h2>Detection Results</h2>
+        <div id="alertContent"></div>
+        <button id="closeAlert">Close</button>
+    </div>
+
+    <script>
+        document.getElementById('uploadForm').addEventListener('submit', async function(e) {
+            e.preventDefault();  // Prevent the default form submission
+            const videoFile = document.getElementById('videoFile').files[0];
+
+            const formData = new FormData();
+            formData.append('video', videoFile);
+
+            // Show the progress bar
+            const progressContainer = document.getElementById('progressContainer');
+            const progressBar = document.getElementById('progressBar');
+            progressContainer.style.display = 'block'; // Show progress container
+            progressBar.style.width = '0%'; // Reset width
+
+            // Display the uploaded video
+            const videoPlayer = document.getElementById('videoPlayer');
+            videoPlayer.src = URL.createObjectURL(videoFile);
+            videoPlayer.style.display = 'block'; // Show video player
+            videoPlayer.play();
+
+            // Simulate progress while waiting for the server response
+            let progressInterval = setInterval(() => {
+                let currentWidth = parseFloat(progressBar.style.width);
+                if (currentWidth < 90) {
+                    progressBar.style.width = currentWidth + 10 + '%'; // Increment by 10%
+                }
+            }, 500);
+
+            try {
+                const response = await fetch('/detect_video', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                clearInterval(progressInterval); // Stop the progress interval
+
+                // Hide the progress bar when done
+                progressContainer.style.display = 'none'; 
+
+                // Check if the response is okay
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    showAlert('Error: ' + errorData.error);
+                    return;
+                }
+
+                // Parse the JSON response
+                const data = await response.json();
+
+                // Log the entire response for debugging
+                console.log('Data:', data);
+
+                // Create HTML for results
+                let resultHtml = `<h3>Violence Detected: ${data.violence_detected ? "Yes" : "No"}</h3>`;
+
+                // Check if the frames array exists and is not empty
+                // if (data.frames && data.frames.length > 0) {
+                //     data.frames.forEach((frame, index) => {
+                //         resultHtml += `Frame ${index + 1}: ${frame.violence}<br>`;
+                //     });
+                // } else {
+                //     resultHtml += "No frame results available.";
+                // }
+
+                // Show the results in the alert box
+                showAlert(resultHtml);  
+            } catch (error) {
+                console.error('Error:', error);
+                showAlert('Error processing the video.');
+            }
+        });
+
+        // Function to show the custom alert
+        function showAlert(content) {
+            document.getElementById('alertContent').innerHTML = content;
+            document.getElementById('overlay').style.display = 'block';
+            document.getElementById('alertBox').style.display = 'block';
+        }
+
+        // Close alert box
+        document.getElementById('closeAlert').addEventListener('click', function() {
+            document.getElementById('overlay').style.display = 'none';
+            document.getElementById('alertBox').style.display = 'none';
+        });
+    </script>
+</body>
+</html>

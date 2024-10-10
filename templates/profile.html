@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vio-Cam</title>
+    <link rel="stylesheet" href="/static/css/styles.css">
+    <link rel="icon" href="/static/images/logo.png" type="image/x-icon">
+</head>
+<body>
+
+    <!-- Navigation Bar -->
+    <nav>
+        <div class="logo">
+            <img src="/static/images/logo.png" alt="Logo" width="50" height="50">
+            <span>Vio-Cam</span>
+        </div>
+        <ul class="nav-links">
+            <li><a href="/">Home</a></li>
+            <li><a href="/logout">Logout</a></li>
+        </ul>
+    </nav>
+
+    <!-- Profile Section -->
+    <div class="profile-container">
+        <h2>User Profile</h2>
+        {% if session.logged_in %}
+            <p><strong>Name:</strong> {{ user.name }}</p>
+            <p><strong>Username:</strong> {{ user.username }}</p>
+            <p><strong>Email ID:</strong> {{ user.email }}</p>
+        {% else %}
+            <p>You need to <a href="/login">login</a> to view your profile.</p>
+        {% endif %}
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2024 Violence Detection Project. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>

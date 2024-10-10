@@ -1,0 +1,680 @@
+/* General Styles */
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    background-color: #101426;
+}
+html {
+    scroll-behavior: smooth; /* Enables smooth scrolling */
+}
+
+/* Style for WebKit browsers */
+::-webkit-scrollbar {
+    width: 8px; /* Width of the scrollbar */
+    height: 2px; /* Height of the scrollbar */
+}
+
+::-webkit-scrollbar-track {
+    background: #101426; /* Background of the scrollbar track */
+    border-radius: 8px; /* Rounded corners for the track */
+}
+
+::-webkit-scrollbar-thumb {
+    background: #0952be; /* Color of the scrollbar thumb */
+    border-radius: 8px; /* Rounded corners for the thumb */
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #2196f3; /* Color on hover */
+}
+
+
+nav {
+    background: #101426;
+    color: #FFF8F3;
+    padding: 20px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    
+}
+
+nav .logo {
+    display: flex;
+    align-items: center;
+    font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    font-size: 35px;
+    font-style: bold;
+}
+
+nav .logo img {
+    margin-right: 20px;
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    margin: 0;
+    padding: 0;
+}
+
+.nav-links li {
+    margin-left: 20px;
+}
+
+.nav-links a {
+    color: #fff;
+    text-decoration: none;
+}
+
+.nav-links a:hover {
+     /* Background color on hover */
+    color:#077fe1; /* Text color on hover */
+}
+
+
+/* Main Content Styles */
+#home {
+    position: relative;
+    /* background: url('/static/images/background.jpeg') repeat center center/cover; Background image */
+    height: 80vh; /* Full viewport height */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff; /* White text for better contrast */
+    animation: fadeInMove 1s ease-out;
+}
+
+@keyframes fadeInMove {
+    0% {
+        opacity: 0;
+        transform: translateY(50px); /* Starting position */
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0); /* Final position */
+    }
+}
+
+.overlay {
+    background: rgb(255, 255, 255); /* Dark overlay for better text readability */
+    padding: 70px;
+    border-radius: 20px; /* Rounded corners */
+    color: #040f33;
+    text-align: center; /* Centered text */
+    /* box-shadow: 0 4px 15px #077fe1; Subtle shadow for depth */
+
+    box-shadow: 
+        0 4px 15px rgba(5, 127, 225, 0.5), /* Subtle shadow for depth */
+        0 0 25px rgba(5, 127, 225, 0.7), /* Outer glow */
+        0 0 50px rgba(5, 127, 225, 0.5); /* More glow */
+}
+
+.overlay h1 {
+    font-size: 3rem; /* Larger heading for emphasis */
+    margin-bottom: 20px;
+}
+
+
+.overlay p {
+    font-size: 1.25rem; /* Slightly larger text */
+    margin-bottom: 30px; /* Space before button group */
+}
+
+.button-group {
+    display: flex;
+    justify-content: center; /* Center the button group */
+    gap: 20px; /* Space between buttons */
+}
+
+.btn {
+    background: #040f33; /* Blue background for buttons */
+    color: #fff; /* White text */
+    padding: 15px 25px; /* Larger padding for buttons */
+    border-radius: 5px; /* Rounded corners */
+    text-decoration: none;
+    font-size: 1.2rem; /* Larger text size */
+    transition: background 0.3s, transform 0.3s; /* Smooth transition */
+}
+
+.btn:hover {
+    background: #0056b3; /* Darker blue on hover */
+    transform: translateY(-2px); /* Slight upward movement */
+}
+
+
+/* About Section Styles */
+#about {
+    padding: 40px 20px; /* Add padding for spacing */
+    border-radius: 20px; /* Rounded corners */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15); /* Subtle shadow for depth */
+    margin: 20px; /* Space around the section */
+}
+
+#about h2 {
+    font-size: 2.5rem; /* Larger font size for section title */
+    color: #ffffff; /* Dark blue text color */
+    margin-bottom: 20px; /* Space below the title */
+    text-align: center; /* Center align the title */
+    text-transform: uppercase; /* Uppercase for emphasis */
+}
+
+
+#about p {
+    font-size: 1.15rem; /* Slightly larger text for readability */
+    color: #333; /* Medium gray text color */
+    margin-bottom: 20px; /* Space below paragraphs */
+    line-height: 1.6; /* Improve line spacing */
+    text-align: start; /* Center align the introductory paragraph */
+}
+
+.project-info {
+    display: flex;
+    justify-content: center; /* Center the card layout */
+    gap: 20px; /* Space between cards */
+    flex-wrap: wrap; /* Allow cards to wrap in smaller viewports */
+}
+
+.card {
+    background: linear-gradient(135deg, #ffffff, #cfe8fc); /* Gradient background for cards */
+    border-radius: 12px; /* Rounded corners for cards */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Shadow for depth */
+    padding: 20px; /* Padding inside cards */
+    flex: 1; /* Allow cards to grow equally */
+    min-width: 200px; /* Minimum width for responsiveness */
+    max-width: 300px; /* Maximum width for cards */
+    text-align: left; /* Left-align text for better readability */
+    transition: transform 0.3s, box-shadow 0.3s; /* Smooth transition on hover */
+}
+
+.card:hover {
+    transform: translateY(-5px); /* Slight upward movement on hover */
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2); /* Enhanced shadow on hover */
+}
+
+.card h3 {
+    font-size: 1.6rem; /* Larger font size for card titles */
+    color: #0d47a1; /* Dark blue color for card titles */
+    margin-bottom: 10px; /* Space below card titles */
+    border-bottom: 2px solid #0d47a1; /* Underline for emphasis */
+    padding-bottom: 5px; /* Space below the title */
+}
+
+.card p {
+    font-size: 1rem; /* Normal size for card text */
+    color: #555; /* Darker gray for card text */
+    margin-bottom: 0; /* No bottom margin */
+    line-height: 1.5; /* Improve line spacing for readability */
+}
+
+
+/* Features Section Styles */
+#features {
+    padding: 40px 20px; /* Add padding for spacing */
+    background-color: #f9f9f9; /* Light gray background */
+    border-top-left-radius: 30px; 
+    border-top-right-radius: 30px;/* Rounded corners */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Shadow for depth */
+    
+}
+
+#features h2 {
+    font-size: 2.5rem; /* Larger font size for section title */
+    color: #0d47a1; /* Dark blue text color */
+    margin-bottom: 20px; /* Space below the title */
+    text-align: center; /* Center align the title */
+    text-transform: uppercase; /* Uppercase for emphasis */
+}
+
+#features p {
+    font-size: 1.15rem; /* Slightly larger text for readability */
+    color: #555; /* Medium gray text color */
+    margin-bottom: 30px; /* Space below paragraph */
+    text-align: center; /* Center align the introductory paragraph */
+}
+
+.features-info {
+    display: flex;
+    justify-content: center; /* Center the feature card layout */
+    gap: 20px; /* Space between cards */
+    flex-wrap: wrap; /* Allow cards to wrap in smaller viewports */
+}
+
+.feature-card {
+    background-color: #ffffff; /* White background for cards */
+    border-radius: 12px; /* Rounded corners for cards */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Shadow for depth */
+    padding: 20px; /* Padding inside cards */
+    flex: 1; /* Allow cards to grow equally */
+    min-width: 400px; /* Minimum width for responsiveness */
+    max-width: 20px; /* Maximum width for cards */
+    text-align: center; /* Center align text for better readability */
+    transition: transform 0.3s, box-shadow 0.3s; /* Smooth transition on hover */
+}
+
+.feature-card:hover {
+    transform: translateY(-5px); /* Slight upward movement on hover */
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2); /* Enhanced shadow on hover */
+}
+
+.feature-card h3 {
+    font-size: 1.5rem; /* Medium font size for feature titles */
+    color: #0d47a1; /* Dark blue color for card titles */
+    margin-bottom: 10px; /* Space below card titles */
+}
+
+.feature-card p {
+    font-size: 1rem; /* Normal size for card text */
+    color: #333; /* Dark text color */
+    margin-bottom: 0; /* No bottom margin */
+    line-height: 1.5; /* Improve line spacing for readability */
+}
+
+
+/* Contact Section Styles */
+#contact {
+    padding: 40px 20px; /* Add padding for spacing */
+    margin: 20px; /* Space around the section */
+    text-align: center; /* Center align text */
+}
+
+#contact h2 {
+    font-size: 2.5rem; /* Larger font size for section title */
+    color: #ffffff; /* Dark blue text color */
+    margin-bottom: 20px; /* Space below the title */
+    text-transform: uppercase; /* Uppercase for emphasis */
+}
+
+#contact p {
+    font-size: 1.15rem; /* Slightly larger text for readability */
+    color: #c0b7b7; /* Medium gray text color */
+    margin-bottom: 20px; /* Space below paragraphs */
+}
+
+textarea {
+    width: 70%; /* Full width */
+    padding: 10px; /* Padding inside textarea */
+    border: 1px solid #ccc; /* Border style */
+    border-radius: 5px; /* Rounded corners */
+    margin-bottom: 20px; /* Space below textarea */
+    font-size: 1rem; /* Font size */
+    resize: none; /* Disable resizing */
+}
+
+button {
+    padding: 10px 20px; /* Padding for the button */
+    background-color: #0d47a1; /* Button background color */
+    color: #ffffff; /* White text color */
+    border: none; /* Remove border */
+    border-radius: 5px; /* Rounded corners */
+    cursor: pointer; /* Pointer cursor on hover */
+    font-size: 1rem; /* Font size */
+    transition: background-color 0.3s, transform 0.3s; /* Smooth transition effects */
+    display: block; /* Make the button a block element */
+    margin: 0 auto; /* Center align the button */
+}
+
+button:hover {
+    background-color: #1976d2; /* Darker shade on hover */
+    transform: scale(1.05); /* Slightly enlarge on hover */
+}
+
+.team {
+    display: flex;
+    justify-content: center; /* Center the team layout */
+    gap: 20px; /* Space between team members */
+    flex-wrap: wrap; /* Allow wrapping on smaller viewports */
+}
+
+.team-member {
+    background-color: #f9f9f9; /* Light gray background for team members */
+    border-radius: 10px; /* Rounded corners */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Shadow for depth */
+    padding: 10px; /* Padding inside team member card */
+    text-align: center; /* Center align text */
+    height: 400px;
+    width: 250px; /* Fixed width for uniformity */
+    transition: transform 0.3s; /* Smooth transform effect */
+}
+
+.team-member:hover {
+    transform: translateY(-5px); /* Slight upward movement on hover */
+}
+
+.team-member img {
+    width: 70%; /* Full width for images */
+    height: 40%;
+    border-radius: 50%; /* Circular images */
+   
+    
+    
+}
+
+.project-guide {
+    display: flex;
+    justify-content: center;  /* Centers horizontally */
+    align-items: center;      /* Centers vertically */
+    flex-direction: column;   /* Ensure elements stack in column */           /* Full viewport height */
+    text-align: center;       /* Center align text */
+    width: 50%;               /* Adjust width as needed */
+    margin: 0 auto;           /* Center horizontally */
+    background-color: #f9f9f9; /* Light gray background */
+    border-radius: 10px;      /* Rounded corners */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Shadow for depth */
+    padding: 15px;   
+    margin-top: 30px;
+}
+
+.project-guide img {
+    width: 150px; /* Fixed width for guide image */
+    border-radius: 10px; /* Rounded corners for guide image */
+    margin-bottom: 10px; /* Space below image */
+}
+
+.project-guide h4 {
+    font-size: 1.5rem; /* Font size for guide title */
+    margin: 10px 0; /* Space above and below the title */
+    color: #0d47a1; /* Title color */
+}
+
+.team-member a:hover {
+    
+    color: #0d47a1; /* Title color */
+    text-decoration: none;
+}
+
+.team-member a {
+    
+    color: #040f33; /* Title color */
+    text-decoration: none;
+}
+
+
+footer {
+    background-color: #101426; /* Dark blue background */
+    color: #ffffff; /* White text color */
+    padding: 20px; /* Padding for spacing */
+    text-align: center; /* Center align text */
+    bottom: 0;
+    
+}
+
+.footer-content {
+    max-width: 1200px; /* Maximum width for the footer content */
+    margin: 0 auto; /* Center the footer content */
+}
+
+.footer-content p {
+    margin: 10px 0; /* Space between paragraphs */
+    font-size: 0.9rem; /* Font size for the text */
+}
+
+
+
+
+
+
+/* Login Container Styles */
+.login-container {
+    max-width: 400px; /* Maximum width of the container */
+    margin: 50px auto; /* Center the container */
+    padding: 20px; /* Padding inside the container */
+    background-color: #ffffff; /* White background */
+    border-radius: 10px; /* Rounded corners */
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+/* Headings */
+.login-container h2 {
+    text-align: center; /* Center align heading */
+    color: #0d47a1; /* Heading color */
+    margin-bottom: 20px; /* Space below heading */
+}
+
+/* Form Group Styles */
+.form-group {
+    margin-bottom: 15px; /* Space between form groups */
+}
+
+.form-group label {
+    display: block; /* Label as block for proper spacing */
+    margin-bottom: 5px; /* Space below label */
+    color: #333; /* Dark color for label */
+}
+
+.form-group input {
+    width: 100%; /* Reduced width to 80% */
+    text-align: start;
+    padding: 8px; /* Reduced padding for height */
+    border: 1px solid #ccc; /* Light border */
+    border-radius: 5px; /* Rounded corners */
+    font-size: 14px; /* Slightly smaller font size */
+    margin: 0 auto; /* Center input field */
+    display: block; /* Ensures input takes the full width specified */
+}
+/* Button Styles */
+
+
+.btn:hover {
+    background-color: #2196f3; /* Change color on hover */
+}
+
+/* Link Styles */
+.login-container p {
+    text-align: center; /* Center align text */
+   
+}
+
+.login-container a {
+    color: #0d47a1; /* Link color */
+    text-decoration: none; /* Remove underline */
+}
+
+.login-container a:hover {
+    text-decoration: underline; /* Underline on hover */
+}
+
+
+/* Signup Container Styles */
+.signup-container {
+    max-width: 400px; /* Maximum width of the container */
+    margin: 50px auto; /* Center the container */
+    padding: 20px; /* Padding inside the container */
+    background-color: #ffffff; /* White background */
+    border-radius: 10px; /* Rounded corners */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+/* Headings */
+.signup-container h2 {
+    text-align: center; /* Center align heading */
+    color: #0d47a1; /* Heading color */
+    margin-bottom: 20px; /* Space below heading */
+}
+
+/* Form Group Styles */
+.form-group {
+    margin-bottom: 15px; /* Space between form groups */
+}
+
+.form-group label {
+    display: block; /* Label as block for proper spacing */
+    margin-bottom: 5px; /* Space below label */
+    color: #333; /* Dark color for label */
+}
+
+/* Input Field Styles */
+.form-group input,
+.form-group select {
+    width: 100%; /* Reduced width to 80% */
+    padding: 8px; /* Reduced padding for height */
+    border: 1px solid #ccc; /* Light border */
+    border-radius: 5px; /* Rounded corners */
+    font-size: 14px; /* Slightly smaller font size */
+    margin: 0 auto; /* Center input field */
+    display: block; /* Ensures input takes the full width specified */
+}
+
+
+
+.btn:hover {
+    background-color: #2196f3; /* Change color on hover */
+}
+
+/* Link Styles */
+.signup-container p {
+    text-align: center; /* Center align text */
+}
+
+.signup-container a {
+    color: #0d47a1; /* Link color */
+    text-decoration: none; /* Remove underline */
+}
+
+.signup-container a:hover {
+    text-decoration: underline; /* Underline on hover */
+}
+
+
+/* Profile Container Styles */
+.profile-container {
+    max-width: 500px; /* Maximum width of the container */
+    margin: 50px auto; /* Center the container */
+    padding: 20px; /* Padding inside the container */
+    background-color: #ffffff; /* White background */
+    border-radius: 10px; /* Rounded corners */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    text-align: left; /* Align text to the left */
+}
+
+/* Headings */
+.profile-container h2 {
+    text-align: center; /* Center align heading */
+    color: #0d47a1; /* Heading color */
+    margin-bottom: 20px; /* Space below heading */
+}
+
+/* Profile Info Styles */
+.profile-info {
+    margin-bottom: 20px; /* Space below profile info */
+}
+
+.profile-info p {
+    margin: 10px 0; /* Space between each info line */
+    font-size: 16px; /* Font size for profile information */
+}
+
+
+
+.btn:hover {
+    background-color: #2196f3; /* Change color on hover */
+}
+
+/* Link Styles */
+.profile-container a {
+    color: #0d47a1; /* Link color */
+    text-decoration: none; /* Remove underline */
+}
+
+.profile-container a:hover {
+    text-decoration: underline; /* Underline on hover */
+}
+
+
+/* Real-Time Container Styles */
+.real-time-container {
+    max-width: 1000px; /* Max width for the section */
+    margin: 50px auto; /* Center the container */
+    padding: 20px; /* Padding inside the container */
+    background-color: #ffffff; /* White background */
+    border-radius: 10px; /* Rounded corners */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    text-align: center; /* Center text */
+}
+
+/* Heading Styles */
+.real-time-container h2 {
+    color: #0d47a1; /* Heading color */
+    margin-bottom: 20px; /* Space below heading */
+}
+
+/* Video Wrapper */
+.video-wrapper {
+    position: relative; /* For absolute positioning of result overlay */
+    display: inline-block; /* Make the video wrapper inline */
+    margin-bottom: 20px; /* Space below video */
+}
+
+/* Video Element */
+video {
+    width: 100%; /* Full width video */
+    border-radius: 5px; /* Rounded corners */
+}
+
+/* Result Overlay Styles */
+.result {
+    position: absolute; /* Position overlay over the video */
+    top: 0; /* Align to the top */
+    left: 0; /* Align to the left */
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    background-color: rgba(255, 0, 0, 0.5); /* Red semi-transparent overlay */
+    display: none; /* Hide by default */
+    color: white; /* Text color */
+    font-size: 24px; /* Font size */
+    text-align: center; /* Center text */
+    line-height: 480px; /* Center vertically based on video height */
+    border-radius: 5px; /* Match video corner radius */
+}
+
+
+
+
+/* Custom Alert Box Styling */
+.alert-box {
+    display: none; /* Hidden by default */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+    z-index: 1000; /* On top of everything */
+}
+
+.alert-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fff;
+    padding: 20px;
+    width: 300px;
+    border-radius: 8px;
+    text-align: center;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.alert-content p {
+    font-size: 16px;
+    margin-bottom: 20px;
+}
+
+.alert-btn {
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.alert-btn:hover {
+    background-color: #0056b3;
+}
+

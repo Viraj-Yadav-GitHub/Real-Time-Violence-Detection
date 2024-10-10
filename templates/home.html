@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vio-Cam</title>
+    <link rel="stylesheet" href="/static/css/styles.css">
+    <link rel="icon" href="/static/images/logo.png" type="image/x-icon">
+</head>
+<body>
+
+    <!-- Navigation Bar -->
+    <nav>
+        <div class="logo">
+            <img src="/static/images/logo.png" alt="Logo" width="50" height="50">
+            
+            <span>Vio-Cam</span>
+        </div>
+        <ul class="nav-links">
+            <li><a href="/">Home</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#features">Features</a></li>
+            <li><a href="#contact">Contact Us</a></li>
+
+            <!-- Flask Conditional Rendering -->
+            {% if session.logged_in %}
+                <li><a href="/profile">{{ session.username }}</a></li>
+                <li><a href="/logout">Logout</a></li>
+            {% else %}
+                <li><a href="/login">Login</a></li>
+            {% endif %}
+        </ul>
+    </nav>
+
+     <!-- Main Content -->
+     <section id="home">
+            <div class="overlay">
+                <h1>Violence Detection System using AI-ML</h1>
+                <p>Choose an option to detect violence.</p>
+                <div class="button-group">
+                    <a href="/real_time" class="btn" onclick="checkLogin(event)"  >Real-Time Video Detection</a>
+                    <a href="/pre_recorded" class="btn" onclick="checkLogin(event)" >Pre-Recorded Video Detection</a>
+                </div>
+            </div>
+        
+    </section>
+
+    <script>
+        function checkLogin(event) {
+    event.preventDefault();
+
+    fetch('/check_login')
+        .then(response => {
+            if (response.ok) {
+                window.location.href = event.target.href;
+            } else {
+                // Show the custom alert if not logged in
+                showAlert("Login first to access this features.");
+               
+            }
+        })
+        .catch(error => {
+            console.error('Error checking login status:', error);
+        });
+}
+
+        </script>
+
+        <!-- Custom Alert Box -->
+<div id="customAlert" class="alert-box">
+    <div class="alert-content">
+        <p id="alertMessage">You need to log in first to access this feature.</p>
+        <button class="alert-btn" onclick="closeAlert()">Login</button>
+    </div>
+</div>
+
+<script>
+
+    // Function to display the custom alert box
+function showAlert(message) {
+    // Update the alert message dynamically
+    document.getElementById('alertMessage').textContent = message;
+
+    // Display the alert box
+    document.getElementById('customAlert').style.display = 'block';
+}
+
+// Function to close the alert box
+function closeAlert() {
+    document.getElementById('customAlert').style.display = 'none';
+    window.location.href = '/login';
+}
+
+</script>
+
+<!-- About Section -->
+<section id="about">
+    <h2>About</h2>
+    <!-- <h4>This project focuses on detecting violence in real-time video streams or pre-recorded videos using AI and machine learning algorithms. Our aim is to leverage cutting-edge technology to improve public safety.</h4> -->
+    
+    <div class="project-info">
+        <div class="card">
+            <h3>Project Vision</h3>
+            <p>Our vision is to create a safer environment using technology that can detect violence in real-time, minimizing risks and ensuring prompt responses.</p>
+        </div>
+        <div class="card">
+            <h3>Project Mission</h3>
+            <p>To build a highly accurate violence detection system that can assist in law enforcement and public safety, promoting peace and security in communities.</p>
+        </div>
+        <div class="card">
+            <h3>Project Goals</h3>
+            <p>1. Develop a reliable detection algorithm. <br>
+               2. Provide real-time alerts to authorities. <br>
+               3. Conduct thorough testing and validation. <br>
+               4. Ensure user-friendly interfaces for ease of use.</p>
+        </div>
+        <div class="card">
+            <h3>Target Audience</h3>
+            <p>Our target audience includes law enforcement agencies, security personnel, and organizations focused on public safety and community well-being.</p>
+        </div>
+        <div class="card">
+            <h3>Technology</h3>
+            <p>We utilize advanced AI and machine learning algorithms, combined with robust video processing techniques, to deliver accurate and timely violence detection.</p>
+        </div>
+    </div>
+</section>
+
+
+
+   
+
+<!-- Features Section -->
+<section id="features">
+    <h2>Features</h2>
+    <p>Our Real-Time Violence Detection System offers a variety of features designed to ensure efficiency, accuracy, and user satisfaction. Here are the key features</p>
+
+    <div class="features-info">
+        <div class="feature-card">
+            <h3>Real-Time Video Violence Detection</h3>
+            <p>Detect violent incidents as they happen in live video feeds, ensuring prompt responses and intervention.</p>
+        </div>
+        <div class="feature-card">
+            <h3>Pre-Recorded Video Analysis</h3>
+            <p>Analyze pre-recorded footage for signs of violence, allowing for thorough investigations and evidence collection.</p>
+        </div>
+        <div class="feature-card">
+            <h3>High Accuracy Machine Learning Model</h3>
+            <p>Utilize state-of-the-art algorithms that achieve high accuracy in detecting violent behavior with minimal false positives.</p>
+        </div>
+        <div class="feature-card">
+            <h3>User-friendly Interface</h3>
+            <p>Navigate through the application easily with an intuitive interface designed for users of all technical levels.</p>
+        </div>
+        <div class="feature-card">
+            <h3>Real-Time Alerts</h3>
+            <p>Receive immediate notifications when violence is detected, allowing for timely action by authorities.</p>
+        </div>
+        <div class="feature-card">
+            <h3>Data Analytics and Reporting</h3>
+            <p>Generate detailed reports and analytics on detected incidents to help improve safety measures and strategies.</p>
+        </div>
+    </div>
+</section>
+
+<!-- Contact Section -->
+<section id="contact">
+    <h2>Contact Us</h2>
+    <p>If you have any questions or feedback, feel free to reach out to us!</p>
+    <textarea placeholder="Write your thoughts here..." rows="4"></textarea>
+    <button type="submit">Submit</button>
+
+    <p>Meet Our Team</p>
+    <div class="team">
+        <div class="team-member">
+            <img src="/static/images/yash.jpg" alt="Team Member 1">
+            <h4>Yash Chaubal</h4>
+            <p>Project Head</p>
+            <a href="https://www.linkedin.com/in/yash-chaubal-99181328a/" target="_blank">LinkedIn</a>
+        </div>
+        <div class="team-member">
+            <img src="/static/images/viraj.jpg" alt="Team Member 2">
+            <h4>Viraj Yadav</h4>
+            <p>Backend Developer</p>
+            <a href="https://www.linkedin.com/in/viraj-yadav/" target="_blank">LinkedIn</a>
+        </div>
+        <div class="team-member">
+            <img src="/static/images/samarth.jpg" alt="Team Member 3">
+            <h4>Samarth Salvi</h4>
+            <p>Project Manager</p>
+            <a href="https://www.linkedin.com/in/samarth-salvi-1010/" target="_blank">LinkedIn</a>
+        </div>
+        <div class="team-member">
+            <img src="/static/images/mani.png" alt="Team Member 4">
+            <h4>Manikanta Manchala</h4>
+            <p>Frontend Developer</p>
+            <a href="https://www.linkedin.com/in/manikanta-manchala/" target="_blank">LinkedIn</a>
+        </div>
+    </div>
+
+    <div class="project-guide">
+        <img src="/static/images/ninad.jpg" alt="Project Guide">
+        <h4>Prof. Ninad Gaikwad</h4>
+        <p>Project Guide</p>
+    </div>
+</section>
+
+
+<footer>
+    <div class="footer-content">
+        <img src="/static/images/logo.png" alt="Logo" width="50" height="50">
+        <p>&copy; 2024 Violence Detection Project. All rights reserved.</p>
+    </div>
+</footer>
+
+</body>
+</html>
