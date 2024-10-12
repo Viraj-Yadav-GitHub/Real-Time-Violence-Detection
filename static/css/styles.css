@@ -192,6 +192,20 @@ nav .logo img {
     transition: transform 0.3s, box-shadow 0.3s; /* Smooth transition on hover */
 }
 
+.card1{
+    background: linear-gradient(135deg, #ffffff, #cfe8fc); /* Gradient background for cards */
+    border-radius: 12px; /* Rounded corners for cards */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Shadow for depth */
+    padding: 20px; /* Padding inside cards */
+    flex: 1; /* Allow cards to grow equally */
+    width: auto; /* Minimum width for responsiveness */
+    width: auto; /* Maximum width for cards */
+    text-align: center; /* Left-align text for better readability */
+    transition: transform 0.3s, box-shadow 0.3s; /* Smooth transition on hover */
+    margin-bottom: 10px;
+
+}
+
 .card:hover {
     transform: translateY(-5px); /* Slight upward movement on hover */
     box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2); /* Enhanced shadow on hover */
@@ -407,6 +421,7 @@ button:hover {
     width: 150px; /* Fixed width for guide image */
     border-radius: 10px; /* Rounded corners for guide image */
     margin-bottom: 10px; /* Space below image */
+    border-radius: 50%;
 }
 
 .project-guide h4 {
@@ -630,6 +645,18 @@ footer {
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Subtle shadow */
     text-align: center; /* Center text */
 }
+
+.rt_btn {
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+
+}
+
+
+
 
 /* Heading Styles */
 .real-time-container h2 {
