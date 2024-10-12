@@ -153,6 +153,7 @@ nav .logo img {
     border-radius: 20px; /* Rounded corners */
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15); /* Subtle shadow for depth */
     margin: 20px; /* Space around the section */
+    
 }
 
 #about h2 {
@@ -295,15 +296,18 @@ nav .logo img {
     margin-bottom: 20px; /* Space below paragraphs */
 }
 
+
 textarea {
-    width: 70%; /* Full width */
-    padding: 10px; /* Padding inside textarea */
-    border: 1px solid #ccc; /* Border style */
-    border-radius: 5px; /* Rounded corners */
-    margin-bottom: 20px; /* Space below textarea */
-    font-size: 1rem; /* Font size */
-    resize: none; /* Disable resizing */
-}
+        width: 100%; /* Full width on all devices */
+        max-width: 1000px; /* Limit width on larger screens */
+        padding: 15px; /* More padding for comfort */
+        border: 1px solid #ddd; /* Lighter border */
+        border-radius: 8px; /* Softer corners */
+        margin-bottom: 25px; /* Space below textarea */
+        font-size: 1.1rem; /* Larger font size */
+        resize: vertical; /* Allow vertical resizing only */
+    }
+
 
 button {
     padding: 10px 20px; /* Padding for the button */
@@ -336,7 +340,7 @@ button:hover {
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Shadow for depth */
     padding: 10px; /* Padding inside team member card */
     text-align: center; /* Center align text */
-    height: 400px;
+    /* height: 100%; */
     width: 250px; /* Fixed width for uniformity */
     transition: transform 0.3s; /* Smooth transform effect */
 }
@@ -347,12 +351,42 @@ button:hover {
 
 .team-member img {
     width: 70%; /* Full width for images */
-    height: 40%;
+    overflow: hidden;
+    object-fit: contain;
     border-radius: 50%; /* Circular images */
    
     
     
 }
+
+.project-grpp {
+    display: flex;
+    justify-content: center;  /* Centers horizontally */
+    align-items: center;      /* Centers vertically */
+    flex-direction: column;   /* Ensure elements stack in column */           /* Full viewport height */
+    text-align: center;       /* Center align text */
+    width: 50%;               /* Adjust width as needed */
+    margin: 0 auto;           /* Center horizontally */
+    background-color: #f9f9f9; /* Light gray background */
+    border-radius: 10px;      /* Rounded corners */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Shadow for depth */
+    padding: 15px;   
+    margin-top: 30px;
+}
+
+.project-grpp img {
+    width: 100%; /* Fixed width for guide image */
+    border-radius: 10px; /* Rounded corners for guide image */
+    margin-bottom: 10px; /* Space below image */
+    height: auto;
+}
+
+.project-grpp h4 {
+    font-size: 1.5rem; /* Font size for guide title */
+    margin: 10px 0; /* Space above and below the title */
+    color: #0d47a1; /* Title color */
+}
+
 
 .project-guide {
     display: flex;
