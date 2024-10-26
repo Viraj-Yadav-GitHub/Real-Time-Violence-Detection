@@ -74,6 +74,209 @@ def video_to_frames(video):
     vidcap.release()
     return ImageFrames
 
+
+import cv2
+import numpy as np
+from keras.models import Sequential
+from keras.layers import Conv2D, MaxPooling2D, Flatten, Dense
+
+# Define the violence detection model architecture
+model = Sequential([
+    Conv2D(32, (3, 3), activation='relu', input_shape=(224, 224, 3)),
+    MaxPooling2D(pool_size=(2, 2)),
+    Conv2D(64, (3, 3), activation='relu'),
+    MaxPooling2D(pool_size=(2, 2)),
+    Conv2D(128, (3, 3), activation='relu'),
+    MaxPooling2D(pool_size=(2, 2)),
+    Flatten(),
+    Dense(512, activation='relu'),
+    Dense(256, activation='relu'),
+    Dense(1, activation='sigmoid')  # Binary classification output
+])
+
+# Preprocessing function: resize and normalize the frame
+def preprocess_frame(frame):
+    frame_resized = cv2.resize(frame, (224, 224))
+    frame_normalized = frame_resized / 255.0
+    return frame_normalized
+
+# Function to detect humans using HOG descriptor
+def detect_humans(frame):
+    hog = cv2.HOGDescriptor()
+    hog.setSVMDetector(cv2.HOGDescriptor_getDefaultPeopleDetector())
+    gray_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+    
+    # Detect humans in the frame
+    humans, _ = hog.detectMultiScale(gray_frame, winStride=(8, 8), padding=(8, 8), scale=1.05)
+    
+    for (x, y, w, h) in humans:
+        # Draw bounding box around each detected human
+        cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
+
+# Violence detection function with bounding boxes and alert
+def detect_violence_in_video(video_path, model):
+    cap = cv2.VideoCapture(video_path)
+    violence_detected = False
+    alert_message = "PoliceAlert: Negative"
+    violence_text = "Violence Detected: No"
+
+    print(f"Processing video: {video_path.split('/')[-1]}")
+    
+    while cap.isOpened():
+        ret, frame = cap.read()
+        if not ret:
+            break
+
+        # Preprocess the frame for violence detection
+        processed_frame = preprocess_frame(frame)
+        
+        # Predict violence
+        prediction = model.predict(np.expand_dims(processed_frame, axis=0))
+        
+        # Update alert message based on prediction
+        if prediction > 0.3:
+            violence_detected = True
+            alert_message = "PoliceAlert: Positive"
+            violence_text = "Violence Detected: Yes"
+        else:
+            alert_message = "PoliceAlert: Negative"
+            violence_text = "Violence Detected: No"
+        
+        # Detect humans in the frame and draw bounding boxes
+        detect_humans(frame)
+
+        # Display the violence detection status at the top of the video
+        cv2.putText(frame, violence_text, (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 2)
+        cv2.putText(frame, alert_message, (10, 70), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
+
+        # Display the video frame by frame
+        cv2.imshow('Video', frame)
+        
+        # Add a small delay and break if 'q' is pressed
+        if cv2.waitKey(1) & 0xFF == ord('q'):
+            break
+
+    cap.release()
+    cv2.destroyAllWindows()  # Automatically close the window after the video ends
+
+    # Final alert message after video processing
+    if violence_detected:
+        print("Violence detected in the video. PoliceAlert: Positive")
+    else:
+        print("No violence detected in the video. PoliceAlert: Negative")
+
+# Path to the video file
+video_path = 'D:/Real Life Violence Dataset/Violence/V_19.mp4'
+
+# Run the violence detection on the specific video
+detect_violence_in_video(video_path, model)
+
+
+
+
+import cv2
+import numpy as np
+from keras.models import Sequential
+from keras.layers import Conv2D, MaxPooling2D, Flatten, Dense
+
+# Define the violence detection model architecture
+model = Sequential([
+    Conv2D(32, (3, 3), activation='relu', input_shape=(224, 224, 3)),
+    MaxPooling2D(pool_size=(2, 2)),
+    Conv2D(64, (3, 3), activation='relu'),
+    MaxPooling2D(pool_size=(2, 2)),
+    Conv2D(128, (3, 3), activation='relu'),
+    MaxPooling2D(pool_size=(2, 2)),
+    Flatten(),
+    Dense(512, activation='relu'),
+    Dense(256, activation='relu'),
+    Dense(1, activation='sigmoid')  # Binary classification output
+])
+
+# Preprocessing function: resize and normalize the frame
+def preprocess_frame(frame):
+    frame_resized = cv2.resize(frame, (224, 224))
+    frame_normalized = frame_resized / 255.0
+    return frame_normalized
+
+# Function to detect humans using HOG descriptor
+def detect_humans(frame):
+    hog = cv2.HOGDescriptor()
+    hog.setSVMDetector(cv2.HOGDescriptor_getDefaultPeopleDetector())
+    gray_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+    
+    # Detect humans in the frame
+    humans, _ = hog.detectMultiScale(gray_frame, winStride=(8, 8), padding=(8, 8), scale=1.05)
+    
+    for (x, y, w, h) in humans:
+        # Draw bounding box around each detected human
+        cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
+
+# Violence detection function with bounding boxes and alert
+def detect_violence_in_video(video_path, model):
+    cap = cv2.VideoCapture(video_path)
+    violence_detected = False
+    alert_message = "PoliceAlert: Negative"
+    violence_text = "Violence Detected: No"
+
+    print(f"Processing video: {video_path.split('/')[-1]}")
+    
+    while cap.isOpened():
+        ret, frame = cap.read()
+        if not ret:
+            break
+
+        # Preprocess the frame for violence detection
+        processed_frame = preprocess_frame(frame)
+        
+        # Predict violence
+        prediction = model.predict(np.expand_dims(processed_frame, axis=0))
+        prediction_score = prediction[0][0]  # Get the actual prediction score
+        
+        # Print the prediction score for debugging
+        print(f"Prediction score: {prediction_score}")
+        
+        # Update alert message based on prediction score
+        if prediction_score > 0.6:  # You may try lowering this threshold
+            violence_detected = True
+            alert_message = "PoliceAlert: Positive"
+            violence_text = "Violence Detected: Yes"
+        else:
+            alert_message = "PoliceAlert: Negative"
+            violence_text = "Violence Detected: No"
+        
+        # Detect humans in the frame and draw bounding boxes
+        detect_humans(frame)
+
+        # Display the violence detection status at the top of the video
+        cv2.putText(frame, violence_text, (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 2)
+        cv2.putText(frame, alert_message, (10, 70), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
+
+        # Display the video frame by frame
+        cv2.imshow('Video', frame)
+        
+        # Add a small delay and break if 'q' is pressed
+        if cv2.waitKey(1) & 0xFF == ord('q'):
+            break
+
+    cap.release()
+    cv2.destroyAllWindows()  # Automatically close the window after the video ends
+
+    # Final alert message after video processing
+    if violence_detected:
+        print("Violence detected in the video. PoliceAlert: Positive")
+    else:
+        print("No violence detected in the video. PoliceAlert: Negative")
+
+# Path to the video file
+video_path = 'D:/Real Life Violence Dataset/NonViolence/NV_19.mp4'
+
+# Run the violence detection on the specific video
+detect_violence_in_video(video_path, model)
+
+
+
+
 # Load and process video data
 print(f"We have \n{len(os.listdir(os.path.join(VideoDataDir, 'Violence')))} Violence videos")
 print(f"{len(os.listdir(os.path.join(VideoDataDir, 'NonViolence')))} NonViolence videos")
@@ -161,7 +364,7 @@ callbacks = [end_callback, lr_callback, model_checkpoints, tensorboard_callback,
 
 # Train the model
 print('Training head...')
-history = model.fit(X_train, y_train, epochs=2, callbacks=callbacks, validation_data=(X_test, y_test), batch_size=4)
+history = model.fit(X_train, y_train, epochs=70, callbacks=callbacks, validation_data=(X_test, y_test), batch_size=4)
 
 # Save the trained model for future use
 model.save('violence_detection_model.h5')
@@ -172,108 +375,123 @@ print('Restoring best weights...')
 model.load_weights(checkpoint_filepath)
 print('Weights restored successfully.')
 
-# Real-time violence detection function
-def preprocess_frame(frame):
-    rgb_img = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-    resized = cv2.resize(rgb_img, (IMG_SIZE, IMG_SIZE))
-    return resized / 255.0  # Normalizing the image
-
-def detect_humans(frame):
-    hog = cv2.HOGDescriptor()
-    hog.setSVMDetector(cv2.HOGDescriptor_getDefaultPeopleDetector())
-    gray_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-    humans, _ = hog.detectMultiScale(gray_frame, winStride=(8, 8), padding=(8, 8), scale=1.05)
-    for (x, y, w, h) in humans:
-        cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
-
-
-# Function to classify actions based on pose key points (for Punch, Kick, etc.)
-def classify_action(pose_landmarks):
-    if pose_landmarks:  # If pose landmarks are detected
-        # Example logic based on the hand and foot positions
-        left_hand = pose_landmarks.landmark[mp_pose.PoseLandmark.LEFT_WRIST]
-        right_hand = pose_landmarks.landmark[mp_pose.PoseLandmark.RIGHT_WRIST]
-        left_foot = pose_landmarks.landmark[mp_pose.PoseLandmark.LEFT_ANKLE]
-        right_foot = pose_landmarks.landmark[mp_pose.PoseLandmark.RIGHT_ANKLE]
-        head = pose_landmarks.landmark[mp_pose.PoseLandmark.NOSE]
-        left_elbow = pose_landmarks.landmark[mp_pose.PoseLandmark.LEFT_ELBOW]
-        right_elbow = pose_landmarks.landmark[mp_pose.PoseLandmark.RIGHT_ELBOW]
-        left_shoulder = pose_landmarks.landmark[mp_pose.PoseLandmark.LEFT_SHOULDER]
-        right_shoulder = pose_landmarks.landmark[mp_pose.PoseLandmark.RIGHT_SHOULDER]
-
-        # Detect punch (right hand moves forward horizontally)
-        if right_hand.x > 0.6 and left_hand.x < 0.6:  # Right hand moves to the right (example logic)
-            return "Punch"
-        
-        # Detect kick (right foot moves up vertically)
-        elif right_foot.y < 0.4:  # Right foot moves up (example logic)
-            return "Kick"
-        
-        # Detect slap (right hand moves horizontally across the head height)
-        elif abs(right_hand.y - head.y) < 0.1 and right_hand.x > 0.5:  # Hand near head, moving across
-            return "Slap"
-        
-        # Detect elbow (elbow is raised and moves close to the head with an angular motion)
-        elif abs(right_elbow.y - right_shoulder.y) < 0.1 and abs(right_elbow.x - head.x) < 0.1:
-            return "Elbow"
-        
-        # You can add more logic for other actions like "slap", "elbow hit", etc.
-        else:
-            return "No Action"
-    return None
-
-# Function for real-time violence detection using webcam
-def detect_violence_in_video(video_path, model):
-    print("Starting video capture...")
-    cap = cv2.VideoCapture(video_path)
-    if not cap.isOpened():
-        print("Error: Could not open webcam.")
-        return
-
-    while cap.isOpened():
-        ret, frame = cap.read()
-        if not ret:
-            print("Error: Could not read frame.")
-            break
-
-        frame_preprocessed = preprocess_frame(frame)
-        prediction = model.predict(np.expand_dims(frame_preprocessed, axis=0))[0][0]
-
-        violence_text = "Violence Detected: No"
-        if prediction > 0.5:
-            violence_text = "Violence Detected: Yes"
-
-        
-         # Detect human actions
-        frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-        results = pose.process(frame_rgb)
-        
-        if results.pose_landmarks:
-            action = classify_action(results.pose_landmarks)
-            if action:
-                cv2.putText(frame, f"Action Detected: {action}", (10, 60), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 255), 2)
-
-        # Display violence detection
-        cv2.putText(frame, violence_text, (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
-        cv2.imshow("Violence Detection", frame)
-
-        if cv2.waitKey(1) & 0xFF == ord('q'):
-            break
-            
-
-        detect_humans(frame)
-        cv2.putText(frame, violence_text, (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
-        cv2.imshow("Violence Detection", frame)
-
-        if cv2.waitKey(1) & 0xFF == ord('q'):
-            break
-
-    cap.release()
-    cv2.destroyAllWindows()
-
 # Load pre-trained model and run real-time detection
 loaded_model = load_model('violence_detection_model.h5')
 print('Model loaded from disk.')
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+# # Real-time violence detection function
+# def preprocess_frame(frame):
+#     rgb_img = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+#     resized = cv2.resize(rgb_img, (IMG_SIZE, IMG_SIZE))
+#     return resized / 255.0  # Normalizing the image
+
+# def detect_humans(frame):
+#     hog = cv2.HOGDescriptor()
+#     hog.setSVMDetector(cv2.HOGDescriptor_getDefaultPeopleDetector())
+#     gray_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+#     humans, _ = hog.detectMultiScale(gray_frame, winStride=(8, 8), padding=(8, 8), scale=1.05)
+#     for (x, y, w, h) in humans:
+#         cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
+
+
+# # Function to classify actions based on pose key points (for Punch, Kick, etc.)
+# def classify_action(pose_landmarks):
+#     if pose_landmarks:  # If pose landmarks are detected
+#         # Example logic based on the hand and foot positions
+#         left_hand = pose_landmarks.landmark[mp_pose.PoseLandmark.LEFT_WRIST]
+#         right_hand = pose_landmarks.landmark[mp_pose.PoseLandmark.RIGHT_WRIST]
+#         left_foot = pose_landmarks.landmark[mp_pose.PoseLandmark.LEFT_ANKLE]
+#         right_foot = pose_landmarks.landmark[mp_pose.PoseLandmark.RIGHT_ANKLE]
+#         head = pose_landmarks.landmark[mp_pose.PoseLandmark.NOSE]
+#         left_elbow = pose_landmarks.landmark[mp_pose.PoseLandmark.LEFT_ELBOW]
+#         right_elbow = pose_landmarks.landmark[mp_pose.PoseLandmark.RIGHT_ELBOW]
+#         left_shoulder = pose_landmarks.landmark[mp_pose.PoseLandmark.LEFT_SHOULDER]
+#         right_shoulder = pose_landmarks.landmark[mp_pose.PoseLandmark.RIGHT_SHOULDER]
+
+#         # Detect punch (right hand moves forward horizontally)
+#         if right_hand.x > 0.6 and left_hand.x < 0.6:  # Right hand moves to the right (example logic)
+#             return "Punch"
+        
+#         # Detect kick (right foot moves up vertically)
+#         elif right_foot.y < 0.4:  # Right foot moves up (example logic)
+#             return "Kick"
+        
+#         # Detect slap (right hand moves horizontally across the head height)
+#         elif abs(right_hand.y - head.y) < 0.1 and right_hand.x > 0.5:  # Hand near head, moving across
+#             return "Slap"
+        
+#         # Detect elbow (elbow is raised and moves close to the head with an angular motion)
+#         elif abs(right_elbow.y - right_shoulder.y) < 0.1 and abs(right_elbow.x - head.x) < 0.1:
+#             return "Elbow"
+        
+#         # You can add more logic for other actions like "slap", "elbow hit", etc.
+#         else:
+#             return "No Action"
+#     return None
+
+# # Function for real-time violence detection using webcam
+# def detect_violence_in_video(video_path, model):
+#     print("Starting video capture...")
+#     cap = cv2.VideoCapture(video_path)
+#     if not cap.isOpened():
+#         print("Error: Could not open webcam.")
+#         return
+
+#     while cap.isOpened():
+#         ret, frame = cap.read()
+#         if not ret:
+#             print("Error: Could not read frame.")
+#             break
+
+#         frame_preprocessed = preprocess_frame(frame)
+#         prediction = model.predict(np.expand_dims(frame_preprocessed, axis=0))[0][0]
+
+#         violence_text = "Violence Detected: No"
+#         if prediction > 0.5:
+#             violence_text = "Violence Detected: Yes"
+
+        
+#          # Detect human actions
+#         frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+#         results = pose.process(frame_rgb)
+        
+#         if results.pose_landmarks:
+#             action = classify_action(results.pose_landmarks)
+#             if action:
+#                 cv2.putText(frame, f"Action Detected: {action}", (10, 60), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 255), 2)
+
+#         # Display violence detection
+#         cv2.putText(frame, violence_text, (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
+#         cv2.imshow("Violence Detection", frame)
+
+#         if cv2.waitKey(1) & 0xFF == ord('q'):
+#             break
+            
+
+#         detect_humans(frame)
+#         cv2.putText(frame, violence_text, (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
+#         cv2.imshow("Violence Detection", frame)
+
+#         if cv2.waitKey(1) & 0xFF == ord('q'):
+#             break
+
+#     cap.release()
+#     cv2.destroyAllWindows()
+
+
+
 # Start real-time detection using webcam
-detect_violence_in_video(0, loaded_model)  # 0 for webcam input
+# detect_violence_in_video(0, loaded_model)  # 0 for webcam input
